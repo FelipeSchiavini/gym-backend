@@ -1,5 +1,6 @@
 import { Client } from "../../../domain/entities/client.entities";
 import { isEmail } from "../../../utils/regex/email";
+import { ClientsRepository } from "../../repositories/clients.respository";
 
 
 interface RegisterNewClientRequest {
@@ -10,8 +11,7 @@ interface RegisterNewClientRequest {
 }
 
 export class RegisterClients {
-    constructor() {
-        console.log('register initialized')    
+    constructor(private clientsRepository: ClientsRepository) {
     }
 
     async exec({name, cpf, email, planId}: RegisterNewClientRequest): Promise<Client>{
@@ -29,6 +29,8 @@ export class RegisterClients {
             email,
             planId
         })
+
+        await this.clientsRepository.insert(client)
 
         return client
     }
