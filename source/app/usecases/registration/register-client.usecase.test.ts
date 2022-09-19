@@ -1,12 +1,16 @@
+import { InMemoryClientsRepository } from "../../../tests/repositories/clients.in-memories"
 import { RegisterClients } from "./register-client"
 
 describe('Create new Client use case',  () => {
-    test('invalid cpf should throw Error', async () => {
-        const name = 'Felipe'
-        const cpf = '309.513.038-48'
-        const email = 'felipe@gmail.com'
-        const planId = '1'
-        const register = new RegisterClients()
+    test('should create new client', async () => {
+        const clientsRepository = new InMemoryClientsRepository()
+        const name ='fake'
+        const cpf='300.000.000-30'
+        const email= 'teste@gmail.com' 
+        const planId= 'plan-fake-id'
+        
+
+        const register = new RegisterClients(clientsRepository)
 
         const response = await register.exec({name, cpf, email, planId})
         
