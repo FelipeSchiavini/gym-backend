@@ -8,7 +8,6 @@ describe('Create new Client use case',  () => {
         const cpf='300.000.000-30'
         const email= 'teste@gmail.com' 
         const planId= 'plan-fake-id'
-        
 
         const register = new RegisterClients(clientsRepository)
 
