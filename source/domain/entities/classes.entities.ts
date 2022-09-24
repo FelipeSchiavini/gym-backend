@@ -1,3 +1,5 @@
+import { Column, PrimaryGeneratedColumn } from "typeorm";
+import { ForeignKeyMetadata } from "typeorm/metadata/ForeignKeyMetadata";
 import { Entity } from "../../core/domain/entity";
 
 interface ClassesProps {
@@ -27,7 +29,4 @@ export class Classes extends Entity<ClassesProps>{
         const classroom = new Classes(props, id)
         return classroom
     }
-
-
-
 }
