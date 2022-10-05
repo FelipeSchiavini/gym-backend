@@ -1,12 +1,10 @@
-import crypto from 'crypto'
-
 export class Entity <T> {
-    protected _id: string;
+    protected _id: number;
     public props: T;
 
-    constructor(props: T, id?: string ){
+    constructor(props: T, id?: number ){
         this.props = props;
-        this._id = id ?? crypto.randomUUID()
+        this._id = id ?? Math.random()*100
     }
 
     get id() {
