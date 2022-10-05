@@ -1,33 +1,28 @@
+import { Inject } from 'typedi';
 import { Client } from "../../../domain/entities/client.entities";
-import { isEmail } from "../../../utils/regex/email";
 import { ClientsRepository } from "../../repositories/clients.respository";
+import { UseCase } from '../usecase';
 
 
 interface RegisterNewClientUseCaseRequest {
     name: string;
     cpf: string;
     email: string;
-    planId: string
+    planId?: string
 }
 
-export class RegisterClients {
-    constructor(private clientsRepository: ClientsRepository) {
-    }
-//(input: CreateAppointmentUseCaseRequest): Promise<CreateAppointmentUseCaseResponse> {
-    async exec(input: RegisterNewClientUseCaseRequest): Promise<Client>{
-        if(isEmail.test(input.email)) {
-            throw Error('This is not an valid email!')
-        }
 
-        if(input.name.length < 3){
-            throw Error('This is not an valid name!')
-        }
 
+export class RegisterClients implements UseCase<RegisterNewClientUseCaseRequest, Client>{
+    @Inject()
+    private clientsRepository: ClientsRepository;
+    
+    async exec(request: RegisterNewClientUseCaseRequest): Promise<Client>{
         const client = await Client.create({
-            name: input.name,
-            cpf: input.cpf,
-            email: input.email,
-            planId: input.planId
+            name: request.name,
+            cpf: request.cpf,
+            email: request.email,
+            planId: request?.planId
         })
 
         await this.clientsRepository.insert(client)
@@ -35,3 +30,4 @@ export class RegisterClients {
         return client
     }
 }
+
