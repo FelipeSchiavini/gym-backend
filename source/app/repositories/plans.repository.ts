@@ -5,14 +5,3 @@ export interface PlansRepository {
     findById (id: string): Promise<Plans | null>;
 }
 
-@Entity('plans')
-export class PlanTable extends BaseEntity{
-    @PrimaryGeneratedColumn()
-    id: number
-    
-    @Column({ type: 'text' })
-    type:string
-
-    @Column()
-    price: number
-}
