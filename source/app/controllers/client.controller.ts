@@ -1,12 +1,10 @@
-import { Body, Get, JsonController, Param, Params, Post, QueryParam, Res } from 'routing-controllers';
+import { Response } from 'express';
+import { Body, Get, JsonController, Params, Post, QueryParam, QueryParams, Res } from 'routing-controllers';
+import Container, { Inject } from 'typedi';
 import { AppDataSource } from '../../services';
 import { ClientTable } from '../../services/model/clients';
-import { ClientControllerInput } from './client.model';
-import { Response  } from 'express';
-import { Client } from '../../domain/entities/client.entities';
-import { ClientsRepository } from '../repositories/clients.respository';
 import { RegisterClients } from '../usecases/registration/register-client';
-import Container from 'typedi';
+import { ClientControllerInput } from './client.model';
 
 
 @JsonController()
@@ -14,48 +12,22 @@ export class ClientController  {
 
   private clientRepository = AppDataSource.getRepository(ClientTable)
 
-
   @Post('/client')
   async createClient(@Body() input: ClientControllerInput, @Res() response: Response) {
-    
-
-    const { name, cpf, email } = input
-
-    try{
-      const client = Client.create(input)
-      Container.get(RegisterClients).exec(input)
-
-    } catch (error){
-      console.log(error)
-      response.status(500).json({message :"Internal server Error!"})
-    }
-  }
-
-  @Get('/client/:id')
-  async getClientById(@Params() id: number, @Res() response:any){
-  try{
-    const user = await this.clientRepository.findBy({ id })
-
-    return{
-      user
-    }
-    } catch (error){
-      console.log(error)
-      response.status(500).json({message :error})
-    }
+      const client = await this.clientRepository.findBy({ email: input.email })
+      if(client.length > 0) {
+        return response.status(200).json({'client': 'email já inserido na plataforma'})
+      }
+      await Container.get(RegisterClients).exec(input)
+      response.status(200).json({'client': 'inserido com sucesso', 'user': client })   
   }
 
   @Get('/client')
-  async getClientByName(@QueryParam('name') name: string, @Res() response:any){
-  try{
-    const user = await this.clientRepository.findBy({ name })
-
-    return{ 
-      user
-    }
-    } catch (error){
-      console.log(error)
-      response.status(500).json({message :error})
-    }
+  async getClientById(@QueryParams() id: number, @Res() response:any){
+  const user = await this.clientRepository.findBy({ id: id })
+  return{
+    ...user
   }
+
+  
 }

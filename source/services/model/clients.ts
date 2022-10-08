@@ -1,17 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-import { ClientControllerInput } from "../../app/controllers/client.model";
 
 
 @Entity('clients')
 export class ClientTable  {
-
-
-
-    ///constructor(name: string, cpf: string, email: string){
-    ///    this.name = name
-    ///    this.cpf = cpf
-    ///    this.email = email
-    ///}
 
     @PrimaryGeneratedColumn()
     id: number

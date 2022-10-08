@@ -1,7 +1,7 @@
+import { Controllers } from "./app/controllers"
 import { errorMiddleware } from "./app/middlewares/error.middleware"
 import { AppDataSource } from "./services"
 const express = require('express')
-const { ClientController } = require("./app/controllers/client.controller")
 const { useExpressServer } = require('routing-controllers')
 const { API_PORT, DB_PORT } = require('./config')
 
@@ -12,7 +12,7 @@ const ServerInitialize = async() => {
     server.use(express.json())
     
     useExpressServer(server, {
-        controllers: [ClientController],
+        controllers: Controllers,
     });
     
     server.use(errorMiddleware)

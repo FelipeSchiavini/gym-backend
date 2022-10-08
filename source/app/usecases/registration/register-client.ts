@@ -1,4 +1,4 @@
-import { Inject } from 'typedi';
+import Container, { Inject, Service } from 'typedi';
 import { Client } from "../../../domain/entities/client.entities";
 import { ClientsRepository } from "../../repositories/clients.respository";
 import { UseCase } from '../usecase';
@@ -12,21 +12,19 @@ interface RegisterNewClientUseCaseRequest {
 }
 
 
-
+@Service()
 export class RegisterClients implements UseCase<RegisterNewClientUseCaseRequest, Client>{
-    @Inject()
-    private clientsRepository: ClientsRepository;
-    
+
     async exec(request: RegisterNewClientUseCaseRequest): Promise<Client>{
-        const client = await Client.create({
+
+        const client = Client.create({
             name: request.name,
             cpf: request.cpf,
             email: request.email,
-            planId: request?.planId
+           // planId: request?.planId
         })
 
-        await this.clientsRepository.insert(client)
-
+        await Container.get(ClientsRepository).insert(client)
         return client
     }
 }
